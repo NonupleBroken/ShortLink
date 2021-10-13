@@ -1,0 +1,16 @@
+[server]
+  addr = "0.0.0.0"
+  port = 38081
+  username = "admin"
+  password = "Adm1N@123#Sh0rTL1nK$G4L7"
+
+[redis]
+  host = "127.0.0.1"
+  port = 6379
+  db = 0
+  password = "Adm1N@123#R3d1S$G4L7"
+
+[log]
+  log_path = "/var/log/short_link"
+  server_log_name = "server.log"
+  web_log_name = "web.log"
