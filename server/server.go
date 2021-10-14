@@ -34,8 +34,6 @@ func Run(cfg *config.Config) {
 		return
 	}
 	logger.L.Info("init redis success")
-	s := "123"
-	logger.S.Infof("%s", s)
 
 	err = web.Start(cfg)
 	if err != nil {

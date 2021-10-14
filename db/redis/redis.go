@@ -9,6 +9,7 @@ import (
 
 var Client *redis.Client
 var Ctx = context.Background()
+var Nil = redis.Nil
 
 func InitRedis(cfg *config.RedisConfig) error {
 	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)

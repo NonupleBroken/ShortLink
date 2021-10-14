@@ -51,24 +51,17 @@ func getShortLinkByLinkID(c *gin.Context) {
 		return
 	}
 
-	isExists, err := redis.Client.HExists(redis.Ctx, "short_link", link.LinkID).Result()
-	if err != nil {
-		logger.S.Error("delete link redis error: ", err)
-		systemError(c)
-		return
-	}
-	if !isExists {
+	result, err := redis.Client.HGet(redis.Ctx, "short_link", link.LinkID).Result()
+	if err == redis.Nil {
 		fail(c, 200, 1, "短链接不存在", nil)
 		return
-	}
-	result, err := redis.Client.HGet(redis.Ctx, "short_link", link.LinkID).Result()
-	if err != nil {
+	} else if err != nil {
 		logger.S.Error("get link redis error: ", err)
 		systemError(c)
 		return
 	}
-	c.Redirect(302, result)
 
+	c.Redirect(302, result)
 }
 
 func addLink(c *gin.Context) {
@@ -125,24 +118,14 @@ func deleteLink(c *gin.Context) {
 		return
 	}
 
-	mutex := redis.NewMutex(link.LinkID, time.Second * 5)
-	mutex.Lock()
-	defer mutex.UnLock()
-
-	isExists, err := redis.Client.HExists(redis.Ctx, "short_link", link.LinkID).Result()
+	result, err := redis.Client.HDel(redis.Ctx, "short_link", link.LinkID).Result()
 	if err != nil {
 		logger.S.Error("delete link redis error: ", err)
 		systemError(c)
 		return
 	}
-	if !isExists {
+	if result == 0 {
 		fail(c, 200, 1, "短链接不存在", nil)
-		return
-	}
-	_, err = redis.Client.HDel(redis.Ctx, "short_link", link.LinkID).Result()
-	if err != nil {
-		logger.S.Error("delete link redis error: ", err)
-		systemError(c)
 		return
 	}
 
