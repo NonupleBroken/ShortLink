@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math/rand"
 	"os"
+	"time"
 )
 
 func isPathExists(dirPath string) (bool, error) {
@@ -39,6 +40,7 @@ func CreateDir(dirPath string) error {
 func GetRandomStr(length uint8) string {
 	const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	const alphabetLength = len(alphabet)
+	rand.Seed(time.Now().UnixNano())
 	result := make([]byte, length)
 	for i := range result {
 		result[i] = alphabet[rand.Intn(alphabetLength)]
